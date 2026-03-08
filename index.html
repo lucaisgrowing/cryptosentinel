@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🌰 CryptoSentinel — Market Manipulation Intelligence</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+    .container { max-width: 1400px; margin: 0 auto; padding: 20px; }
+    header {
+      text-align: center;
+      padding: 40px 20px;
+      border-bottom: 2px solid #334155;
+      margin-bottom: 40px;
+    }
+    h1 {
+      font-size: 3em;
+      margin-bottom: 10px;
+      background: linear-gradient(135deg, #60a5fa, #a78bfa);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    .subtitle { font-size: 1.2em; color: #94a3b8; margin-bottom: 20px; }
+    .threat-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 0.9em;
+    }
+    .threat-critical { background: #dc2626; color: white; }
+    .threat-high { background: #ea580c; color: white; }
+    .threat-medium { background: #eab308; color: #000; }
+    .threat-low { background: #22c55e; color: #000; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 40px; }
+    .card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 20px;
+      transition: all 0.3s ease;
+    }
+    .card:hover { border-color: #60a5fa; box-shadow: 0 0 20px rgba(96, 165, 250, 0.1); }
+    .card h3 { color: #60a5fa; margin-bottom: 10px; font-size: 0.9em; text-transform: uppercase; }
+    .card .value { font-size: 2.5em; font-weight: bold; margin: 10px 0; }
+    .card .label { color: #94a3b8; font-size: 0.9em; }
+    
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 40px; }
+    @media (max-width: 768px) { .stats-grid { grid-template-columns: repeat(2, 1fr); } }
+    
+    .stat-box {
+      background: #0f172a;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 15px;
+      text-align: center;
+    }
+    .stat-box .number { font-size: 2em; font-weight: bold; color: #60a5fa; }
+    .stat-box .label { color: #94a3b8; font-size: 0.85em; margin-top: 5px; }
+    
+    .section-title {
+      font-size: 1.5em;
+      margin: 40px 0 20px 0;
+      padding-bottom: 10px;
+      border-bottom: 2px solid #334155;
+      color: #e2e8f0;
+    }
+    
+    .events-list { max-height: 600px; overflow-y: auto; }
+    .event-item {
+      background: #0f172a;
+      border-left: 4px solid #60a5fa;
+      padding: 15px;
+      margin-bottom: 10px;
+      border-radius: 4px;
+    }
+    .event-item.critical { border-left-color: #dc2626; }
+    .event-item.high { border-left-color: #ea580c; }
+    .event-item.medium { border-left-color: #eab308; }
+    .event-item.low { border-left-color: #22c55e; }
+    
+    .event-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .event-entity { font-weight: bold; color: #60a5fa; }
+    .event-time { color: #64748b; font-size: 0.85em; }
+    .event-summary { color: #cbd5e1; font-size: 0.95em; line-height: 1.5; }
+    .event-category { display: inline-block; background: #334155; color: #94a3b8; padding: 3px 8px; border-radius: 3px; font-size: 0.75em; margin-top: 8px; }
+    
+    .brief-section {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+    .brief-section h4 { color: #60a5fa; margin-bottom: 10px; }
+    .brief-section ul { margin-left: 20px; }
+    .brief-section li { margin-bottom: 8px; }
+    
+    .loading { text-align: center; padding: 40px; color: #94a3b8; }
+    .loading::after { content: " 🌰"; animation: spin 1s linear infinite; }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #64748b;
+      border-top: 1px solid #334155;
+      margin-top: 60px;
+      font-size: 0.9em;
+    }
+    .chestnut { display: inline-block; margin: 0 2px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🌰 CryptoSentinel</h1>
+      <p class="subtitle">AI-Powered Crypto Market Manipulation Intelligence</p>
+      <p style="color: #94a3b8; font-size: 0.95em;">Weekly automated detection of wash trading, spoofing, pump-and-dump, and anomalous exchange activity</p>
+    </header>
+
+    <div id="threat-level" style="text-align: center; margin-bottom: 30px;">
+      <p style="color: #94a3b8; margin-bottom: 10px;">Current Threat Level</p>
+      <div id="threat-badge" class="threat-badge threat-medium">LOADING...</div>
+    </div>
+
+    <div class="stats-grid">
+      <div class="stat-box">
+        <div class="number" id="stat-total">0</div>
+        <div class="label">Total Signals</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-critical" style="color: #dc2626;">0</div>
+        <div class="label">Critical</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-high" style="color: #ea580c;">0</div>
+        <div class="label">High Risk</div>
+      </div>
+      <div class="stat-box">
+        <div class="number" id="stat-score">--</div>
+        <div class="label">Weekly Score</div>
+      </div>
+    </div>
+
+    <div class="section-title">🌰 Executive Summary</div>
+    <div class="brief-section">
+      <p id="brief-summary" style="color: #cbd5e1;">Loading intelligence brief...</p>
+    </div>
+
+    <div class="section-title">🌰 Risk Matrix</div>
+    <div class="grid">
+      <div class="card">
+        <h3>Wash Trading Risk</h3>
+        <div class="value" id="risk-wash">--</div>
+        <div class="label">/10</div>
+      </div>
+      <div class="card">
+        <h3>Spoofing Risk</h3>
+        <div class="value" id="risk-spoof">--</div>
+        <div class="label">/10</div>
+      </div>
+      <div class="card">
+        <h3>Pump & Dump Risk</h3>
+        <div class="value" id="risk-pump">--</div>
+        <div class="label">/10</div>
+      </div>
+      <div class="card">
+        <h3>Fake Volume Risk</h3>
+        <div class="value" id="risk-fake">--</div>
+        <div class="label">/10</div>
+      </div>
+    </div>
+
+    <div class="section-title">🌰 Recent Signals</div>
+    <div class="events-list" id="events-container">
+      <div class="loading">Loading signals...</div>
+    </div>
+
+    <div class="section-title">🌰 Key Findings</div>
+    <div class="brief-section">
+      <ul id="findings-list">
+        <li>Loading analysis...</li>
+      </ul>
+    </div>
+
+    <footer>
+      <p>🌰 CryptoSentinel — Built with <a href="https://github.com/1712n/product-kit-template" style="color: #60a5fa;">product-kit-template</a> | Powered by GitHub Models & CPW Tracker API 🌰</p>
+      <p style="margin-top: 10px;">Last updated: <span id="last-update">--</span></p>
+    </footer>
+  </div>
+
+  <script>
+    async function loadData() {
+      try {
+        const response = await fetch('data/events.json');
+        const data = await response.json();
+        
+        // Handle both wrapped and unwrapped formats
+        const events = data.events || data;
+        const meta = data.meta || {};
+        const stats = data.stats || {};
+        const ai = data.ai || {};
+        const brief = ai.brief || {};
+        
+        // Update stats
+        document.getElementById('stat-total').textContent = events.length;
+        document.getElementById('stat-critical').textContent = stats.critical || 0;
+        document.getElementById('stat-high').textContent = stats.high || 0;
+        document.getElementById('stat-score').textContent = brief.weeklyScore ? brief.weeklyScore + '/100' : '--';
+        
+        // Update threat level
+        const threatLevel = brief.threatLevel || 'MODERATE';
+        const threatBadge = document.getElementById('threat-badge');
+        threatBadge.textContent = threatLevel;
+        threatBadge.className = 'threat-badge threat-' + threatLevel.toLowerCase();
+        
+        // Update brief
+        document.getElementById('brief-summary').textContent = brief.executiveSummary || 'Analysis pending...';
+        
+        // Update risk matrix
+        const riskMatrix = brief.riskMatrix || {};
+        document.getElementById('risk-wash').textContent = riskMatrix.washTrading || '--';
+        document.getElementById('risk-spoof').textContent = riskMatrix.spoofing || '--';
+        document.getElementById('risk-pump').textContent = riskMatrix.pumpAndDump || '--';
+        document.getElementById('risk-fake').textContent = riskMatrix.fakeVolume || '--';
+        
+        // Update findings
+        const findings = brief.keyFindings || [];
+        const findingsList = document.getElementById('findings-list');
+        findingsList.innerHTML = findings.map(f => `<li>${f}</li>`).join('') || '<li>No findings available</li>';
+        
+        // Render events
+        const container = document.getElementById('events-container');
+        if (events.length === 0) {
+          container.innerHTML = '<div class="loading">No signals available</div>';
+        } else {
+          container.innerHTML = events.slice(0, 50).map(event => `
+            <div class="event-item ${event.severity || 'low'}">
+              <div class="event-header">
+                <span class="event-entity">${event.entities || 'Unknown'}</span>
+                <span class="threat-badge threat-${event.severity || 'low'}">${(event.severity || 'low').toUpperCase()}</span>
+              </div>
+              <div class="event-summary">${event.eventSummary || 'No summary'}</div>
+              <div style="margin-top: 8px;">
+                <span class="event-category">${event.category || event.queryTopic || 'signal'}</span>
+                <span class="event-time" style="margin-left: 10px;">${new Date(event.timestamp).toLocaleDateString()}</span>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        // Update timestamp
+        document.getElementById('last-update').textContent = meta.lastUpdated ? new Date(meta.lastUpdated).toLocaleString() : 'Unknown';
+        
+      } catch (error) {
+        console.error('Error loading data:', error);
+        document.getElementById('events-container').innerHTML = '<div class="loading">Error loading data</div>';
+      }
+    }
+    
+    // Load on page load and refresh every 5 minutes
+    loadData();
+    setInterval(loadData, 300000);
+  </script>
+</body>
+</html>

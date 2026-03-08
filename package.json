@@ -1,0 +1,1 @@
+{"scripts": {"analyze": "node scripts/ai-analysis.js", "deploy": "npm run update && npm run analyze", "update": "node scripts/api-call.js"}, "type": "module"}
